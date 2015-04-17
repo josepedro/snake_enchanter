@@ -87,7 +87,6 @@ public class Snake extends Activity {
 
         myfft = new MyFFT();
         chordTV = (TextView) findViewById(R.id.chord_text);
-        chordTV.setText("TESSSSSTADNO");
 
         asyncTaskChords = new RecordingAndSetChord();
         asyncTaskChords.execute();

@@ -41,6 +41,42 @@
         android:textSize="24sp"
         android:visibility="visible" />
 
+    <TextView android:id="@+id/D"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:visibility="visible"
+        android:text="D"
+        android:gravity="center_vertical"/>
+
+    <TextView android:id="@+id/E"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:visibility="visible"
+        android:text="E"
+        android:gravity="center_horizontal"/>
+
+    <TextView android:id="@+id/Dm"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:visibility="visible"
+        android:text="Dm"
+        android:gravity="fill_horizontal"/>
+
+    <TextView android:id="@+id/Em"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:visibility="visible"
+        android:text="Em"
+        android:gravity="end"/>
+
   <TextView android:id="@+id/text"
   android:layout_width="match_parent"
     android:layout_height="match_parent"
