@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/home/gepeto/AndroidStudioProjects/Snake1/app/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="muted_blue">#ff100050</color>
+    <color name="muted_green">#ff004000</color>
+    <color name="muted_red">#ff400010</color>
+    <color name="muted_yellow">#ff404000</color>
+    <color name="text_violet">#ff8888ff</color>
+    <declare-styleable name="BackgroundView"><attr format="color" name="colorSegmentOne"/><attr format="color" name="colorSegmentTwo"/><attr format="color" name="colorSegmentThree"/><attr format="color" name="colorSegmentFour"/></declare-styleable>
+    <declare-styleable name="TileView"><attr format="dimension" name="tileSize"/></declare-styleable>
+    <!-- From: file:/home/gepeto/AndroidStudioProjects/Snake1/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="app_name">Snake</string>
+    <string name="mode_lose">Game Over\nScore: %1$d \nPress Up To Play</string>
+    <string name="mode_pause">Paused\nPress Up To Resume</string>
+    <string name="mode_ready">Snake\nPress Up To Play</string>
+</resources>

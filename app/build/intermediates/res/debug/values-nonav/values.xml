@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/home/gepeto/AndroidStudioProjects/Snake1/app/src/main/res/values-nonav/strings.xml -->
+    <eat-comment/>
+    <string name="app_name">Snake</string>
+    <string name="mode_lose">Game Over\nScore: %1$d \nTouch Screen To Play</string>
+    <string name="mode_pause">Paused\nTouch Screen To Resume</string>
+    <string name="mode_ready">Snake\nTouch Screen To Play</string>
+</resources>
