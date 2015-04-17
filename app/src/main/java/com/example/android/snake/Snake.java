@@ -17,14 +17,19 @@
 package com.example.android.snake;
 
 import android.app.Activity;
+import android.media.AudioRecord;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.TextView;
+import android.media.AudioFormat;
+import android.os.AsyncTask;
+import android.media.MediaRecorder;
 
-// José Pedro de Ssasd
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * Snake: a simple game that everyone can enjoy.
@@ -50,6 +55,26 @@ public class Snake extends Activity {
     private SnakeView mSnakeView;
 
     /**
+     * Constants for chords recongnized
+     */
+    private static final int RECORDER_SAMPLERATE = 44100;
+    private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
+    private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
+    private MyFFT myfft;
+    private TextView chordTV;
+    private RecordingAndSetChord asyncTaskChords = null;
+    private AudioRecord recorder = null;
+    private int bufferSize = 0;
+
+    private static String[] nomeAcordes = { "F", "F m", "F aum", "F dim", "F#",
+            "F# m", "F# aum", "F# dim", "G", "G m", "G aum", "G dim", "G#",
+            "G# m", "G# aum", "G# dim", "A", "A m", "A aum", "A dim", "Bb",
+            "Bb m", "Bb aum", "Bb dim", "B", "B m", "B aum", "B dim", "C",
+            "C m", "C aum", "C dim", "C#", "C# m", "C# aum", "C# dim", "D",
+            "D m", "D aum", "D dim", "Eb", "Eb m", "Eb aum", "Eb dim", "E",
+            "E m", "E aum", "E dim" };
+
+    /**
      * Called when Activity is first created. Turns off the title bar, sets up the content views,
      * and fires up the SnakeView.
      * 
@@ -59,6 +84,13 @@ public class Snake extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.snake_layout);
+
+        myfft = new MyFFT();
+        chordTV = (TextView) findViewById(R.id.chord_text);
+        chordTV.setText("TESSSSSTADNO");
+
+        asyncTaskChords = new RecordingAndSetChord();
+        asyncTaskChords.execute();
 
         mSnakeView = (SnakeView) findViewById(R.id.snake);
         mSnakeView.setDependentViews((TextView) findViewById(R.id.text),
@@ -91,7 +123,7 @@ public class Snake extends Activity {
                     direction |= (x > 1 - y) ? 2 : 0;
 
                     // Direction is same as the quadrant which was clicked
-                    mSnakeView.moveSnake(direction);
+                    //mSnakeView.moveSnake(direction);
 
                 } else {
                     // If the game is not running then on touching any part of the screen
@@ -141,5 +173,114 @@ public class Snake extends Activity {
 
         return super.onKeyDown(keyCode, msg);
     }
+
+
+    private class RecordingAndSetChord extends AsyncTask<Void, byte[], Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            System.out.println("Do in background!!!");
+
+            while (true) {
+
+                // Initializing variables for record
+                bufferSize = AudioRecord.getMinBufferSize(RECORDER_SAMPLERATE,
+                        AudioFormat.CHANNEL_IN_MONO,
+                        AudioFormat.ENCODING_PCM_16BIT);
+                // Instanciando array de bytes
+                byte data[] = new byte[bufferSize];
+                // Inicializando AudioRecord
+                recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,
+                        RECORDER_SAMPLERATE, RECORDER_CHANNELS,
+                        RECORDER_AUDIO_ENCODING, bufferSize);
+
+                // Inicializando the ByteArrayOutPutStream
+                ByteArrayOutputStream baos = null;
+                baos = new ByteArrayOutputStream();
+                // Verificando Status do objeto recorder
+                int i = recorder.getState();
+                if (i == 1) {
+                    recorder.startRecording();
+                }
+
+                long tempoInicio = System.currentTimeMillis();
+                long tempoDecorrido = 0;
+                while (tempoDecorrido <= 800) {
+                    int result = recorder.read(data, 0, data.length);
+                    if (result == AudioRecord.ERROR_INVALID_OPERATION) {
+                        throw new RuntimeException();
+                    } else if (result == AudioRecord.ERROR_BAD_VALUE) {
+                        throw new RuntimeException();
+                    } else {
+
+                        baos.write(data, 0, result);
+                    }
+                    tempoDecorrido = System.currentTimeMillis() - tempoInicio;
+                }
+
+                recorder.stop();
+                recorder.release();
+                recorder = null;
+
+                publishProgress(baos.toByteArray());
+
+                try {
+
+                    baos.close();
+                    baos = null;
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+        @Override
+        protected void onProgressUpdate(byte[]... values) {
+
+            myfft.setByteArraySong(values[0]);
+            float[] S1 = myfft.getS1();
+
+            float energy = myfft.getEnergy();
+
+            // Reordenando as notas nas barras de energia
+            float[] valores = new float[12];
+            for (int l = 0; l < S1.length; l++) {
+                valores[l] = S1[(l + 7) % S1.length];
+            }
+
+            // Setando valores na tela
+            int number_chord = myfft.getAcorde();
+            chordTV.setText(""+number_chord);
+            //Mi maior = 44, DM = 36
+            //mSnakeView.moveSnake(direction);
+            if (number_chord == 36){
+                mSnakeView.moveSnake(MOVE_LEFT);
+            }
+            else if (number_chord == 44){
+                mSnakeView.moveSnake(MOVE_UP);
+            }
+            else if (number_chord == 37){
+                mSnakeView.moveSnake(MOVE_RIGHT);
+            }
+            else if (number_chord == 45){
+                mSnakeView.moveSnake(MOVE_DOWN);
+            }
+            else {
+                // Do nothing
+            }
+
+
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+    }
+
 
 }
