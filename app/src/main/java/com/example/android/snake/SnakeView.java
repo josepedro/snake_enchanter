@@ -18,6 +18,11 @@ package com.example.android.snake;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -148,8 +153,26 @@ public class SnakeView extends TileView {
         Resources r = this.getContext().getResources();
 
         resetTiles(4);
-        loadTile(RED_STAR, r.getDrawable(R.drawable.redstar));
-        loadTile(YELLOW_STAR, r.getDrawable(R.drawable.yellowstar));
+
+        //snake colors
+        loadTile(RED_STAR, r.getDrawable(R.drawable.yellowstar));
+
+        //snake head
+        Bitmap snake_head_bitmap_original = BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.snakehead);
+        Bitmap snake_head_bitmap_result = Bitmap.createBitmap(snake_head_bitmap_original.getWidth(),
+                snake_head_bitmap_original.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas temp_canvas = new Canvas(snake_head_bitmap_result);
+        temp_canvas.rotate(90, snake_head_bitmap_original.getWidth()/2, snake_head_bitmap_original.getHeight()/2);
+        temp_canvas.drawBitmap(snake_head_bitmap_original, 0, 0, null);
+
+
+        //mImageView.setImageBitmap(snake_head_bitmap_result);
+
+        Drawable snake_head = new BitmapDrawable(snake_head_bitmap_result);
+
+        loadTile(YELLOW_STAR, snake_head);
+        //wall
         loadTile(GREEN_STAR, r.getDrawable(R.drawable.greenstar));
 
     }

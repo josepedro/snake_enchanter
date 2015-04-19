@@ -122,7 +122,7 @@ public class Snake extends Activity {
                     direction |= (x > 1 - y) ? 2 : 0;
 
                     // Direction is same as the quadrant which was clicked
-                    //mSnakeView.moveSnake(direction);
+                    mSnakeView.moveSnake(direction);
 
                 } else {
                     // If the game is not running then on touching any part of the screen
