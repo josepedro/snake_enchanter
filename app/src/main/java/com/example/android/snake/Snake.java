@@ -86,7 +86,7 @@ public class Snake extends Activity {
         setContentView(R.layout.snake_layout);
 
         myfft = new MyFFT();
-        chordTV = (TextView) findViewById(R.id.chord_text);
+
 
         asyncTaskChords = new RecordingAndSetChord();
         asyncTaskChords.execute();
@@ -122,7 +122,7 @@ public class Snake extends Activity {
                     direction |= (x > 1 - y) ? 2 : 0;
 
                     // Direction is same as the quadrant which was clicked
-                    mSnakeView.moveSnake(direction);
+                    //mSnakeView.moveSnake(direction);
 
                 } else {
                     // If the game is not running then on touching any part of the screen
@@ -252,7 +252,6 @@ public class Snake extends Activity {
 
             // Setando valores na tela
             int number_chord = myfft.getAcorde();
-            chordTV.setText(""+number_chord);
             //Mi maior = 44, DM = 36
             //mSnakeView.moveSnake(direction);
             if (number_chord == 36){

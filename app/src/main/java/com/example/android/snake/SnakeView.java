@@ -67,6 +67,11 @@ public class SnakeView extends TileView {
     private static final int RED_STAR = 1;
     private static final int YELLOW_STAR = 2;
     private static final int GREEN_STAR = 3;
+    private static final int HEAD_1 = 4;
+    private static final int HEAD_2 = 5;
+    private static final int HEAD_3 = 6;
+    private static final int HEAD_4 = 7;
+
 
     /**
      * mScore: Used to track the number of apples captured mMoveDelay: number of milliseconds
@@ -152,28 +157,73 @@ public class SnakeView extends TileView {
 
         Resources r = this.getContext().getResources();
 
-        resetTiles(4);
+        resetTiles(8);
 
         //snake colors
-        loadTile(RED_STAR, r.getDrawable(R.drawable.yellowstar));
+        loadTile(YELLOW_STAR, r.getDrawable(R.drawable.snake_part_1));
 
         //snake head
         Bitmap snake_head_bitmap_original = BitmapFactory.decodeResource(this.getResources(),
-                R.drawable.snakehead);
+                R.drawable.headnew);
         Bitmap snake_head_bitmap_result = Bitmap.createBitmap(snake_head_bitmap_original.getWidth(),
                 snake_head_bitmap_original.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas temp_canvas = new Canvas(snake_head_bitmap_result);
+        temp_canvas.rotate(-90, snake_head_bitmap_original.getWidth()/2, snake_head_bitmap_original.getHeight()/2);
+        temp_canvas.drawBitmap(snake_head_bitmap_original, 0, 0, null);
+        //mImageView.setImageBitmap(snake_head_bitmap_result);
+        Drawable snake_head_1 = new BitmapDrawable(snake_head_bitmap_result);
+        loadTile(HEAD_1, snake_head_1);
+        snake_head_bitmap_original = null;
+        snake_head_bitmap_result = null;
+        temp_canvas = null;
+
+        snake_head_bitmap_original = BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.headnew);
+        snake_head_bitmap_result = Bitmap.createBitmap(snake_head_bitmap_original.getWidth(),
+                snake_head_bitmap_original.getHeight(), Bitmap.Config.ARGB_8888);
+        temp_canvas = new Canvas(snake_head_bitmap_result);
+        temp_canvas.rotate(180, snake_head_bitmap_original.getWidth()/2, snake_head_bitmap_original.getHeight()/2);
+        temp_canvas.drawBitmap(snake_head_bitmap_original, 0, 0, null);
+        //mImageView.setImageBitmap(snake_head_bitmap_result);
+        Drawable snake_head_2 = new BitmapDrawable(snake_head_bitmap_result);
+        loadTile(HEAD_2, snake_head_2);
+        snake_head_bitmap_original = null;
+        snake_head_bitmap_result = null;
+        temp_canvas = null;
+
+        snake_head_bitmap_original = BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.headnew);
+        snake_head_bitmap_result = Bitmap.createBitmap(snake_head_bitmap_original.getWidth(),
+                snake_head_bitmap_original.getHeight(), Bitmap.Config.ARGB_8888);
+        temp_canvas = new Canvas(snake_head_bitmap_result);
         temp_canvas.rotate(90, snake_head_bitmap_original.getWidth()/2, snake_head_bitmap_original.getHeight()/2);
         temp_canvas.drawBitmap(snake_head_bitmap_original, 0, 0, null);
-
-
         //mImageView.setImageBitmap(snake_head_bitmap_result);
+        Drawable snake_head_3 = new BitmapDrawable(snake_head_bitmap_result);
+        loadTile(HEAD_3, snake_head_3);
+        snake_head_bitmap_original = null;
+        snake_head_bitmap_result = null;
+        temp_canvas = null;
 
-        Drawable snake_head = new BitmapDrawable(snake_head_bitmap_result);
+        snake_head_bitmap_original = BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.headnew);
+        snake_head_bitmap_result = Bitmap.createBitmap(snake_head_bitmap_original.getWidth(),
+                snake_head_bitmap_original.getHeight(), Bitmap.Config.ARGB_8888);
+        temp_canvas = new Canvas(snake_head_bitmap_result);
+        temp_canvas.rotate(0, snake_head_bitmap_original.getWidth()/2, snake_head_bitmap_original.getHeight()/2);
+        temp_canvas.drawBitmap(snake_head_bitmap_original, 0, 0, null);
+        //mImageView.setImageBitmap(snake_head_bitmap_result);
+        Drawable snake_head_4 = new BitmapDrawable(snake_head_bitmap_result);
+        loadTile(HEAD_4, snake_head_4);
+        snake_head_bitmap_original = null;
+        snake_head_bitmap_result = null;
+        temp_canvas = null;
 
-        loadTile(YELLOW_STAR, snake_head);
+        // apples
+        loadTile(RED_STAR, r.getDrawable(R.drawable.sanke_food1));
+
         //wall
-        loadTile(GREEN_STAR, r.getDrawable(R.drawable.greenstar));
+        loadTile(GREEN_STAR, r.getDrawable(R.drawable.sanke_food2));
 
     }
 
@@ -465,7 +515,7 @@ public class SnakeView extends TileView {
      */
     private void updateApples() {
         for (Coordinate c : mAppleList) {
-            setTile(YELLOW_STAR, c.x, c.y);
+            setTile(RED_STAR, c.x, c.y);
         }
     }
 
@@ -546,9 +596,17 @@ public class SnakeView extends TileView {
         int index = 0;
         for (Coordinate c : mSnakeTrail) {
             if (index == 0) {
-                setTile(YELLOW_STAR, c.x, c.y);
+                if (mDirection == NORTH){
+                    setTile(HEAD_1, c.x, c.y);
+                }else if(mDirection == WEST){
+                    setTile(HEAD_2, c.x, c.y);
+                }else if(mDirection == SOUTH){
+                    setTile(HEAD_3, c.x, c.y);
+                }else if(mDirection == EAST){
+                    setTile(HEAD_4, c.x, c.y);
+                }
             } else {
-                setTile(RED_STAR, c.x, c.y);
+                setTile(YELLOW_STAR, c.x, c.y);
             }
             index++;
         }
